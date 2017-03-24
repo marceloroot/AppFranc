@@ -120,7 +120,6 @@ angular.module('starter.controllers', [])
         }
     }
 
-
     // Error callback
 
     function onMapError(error) {
@@ -173,15 +172,13 @@ angular.module('starter.controllers', [])
             
         }
         Angle = Angle - heading;
-        if (Angle < 0) {
-            Angle = Angle + 360; //This is simular to doing
-        }
+       
         return Angle
     }
 
 
     var Locais = [
-    { Lat: 32.885417273021446, Long: 66.29315744590238, heade: 90.90 },
+    { Lat: 28.03932552928991, Long: 38.168157445898785, heade: 279 },
     { Lat: 43.465119, Long: -50.522375, heade: 60.90, },
     { Lat: 43.465193, Long: -90.522386, heade: 90.90 },
     { Lat: 43.465240, Long: -90.522389, heade: 90.90 },
@@ -195,13 +192,14 @@ angular.module('starter.controllers', [])
     // current GPS coordinates
     //
     $scope.resultado = [];
-   
+    $scope.posicao = [];
    // $scope.resposta[Locais.length.valueOf()] = null;  
     var onSuccess = function (position) {
-      
+        alert("entrou");
         Locais.forEach(function(item,index){  
-            $scope.resultado.push(calcDistancia(position.coords.latitude, position.coords.longitude, item.Lat, item.Long), calcAngulobearing(position.coords.latitude, position.coords.longitude, item.Lat, item.Long, position.coords.heading));
-           alert($scope.resultado);
+          $scope.resultado.push(calcDistancia(position.coords.latitude, position.coords.longitude, item.Lat, item.Long));
+          $scope.posicao.push(calcAngulobearing(position.coords.latitude, position.coords.longitude, item.Lat, item.Long, position.coords.heading))
+     
         });
        
         
@@ -231,53 +229,54 @@ angular.module('starter.controllers', [])
       
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
         $scope.resultado.forEach(function (item, index) {
-
-            if (item > 10) {
-
-         
-                var media = new Media('src/Kalimba.mp3', null, null, mediaStatusCallback);
-
-                sons.push('src/objetosmaisdezmetros.mp3');
-
-            }
-            else if ((item =>1) && (item < 2)) {
-
-
-                sons.push('src/objetoummentrodireita.mp3');
-                
-
-            }
-            else if ((item =>2) && (item < 3))
-            {
-                sons.push('src/objetodoismentrodireita.mp3');
-            }
-            else if ((item =>3) && (item < 4))
-            {
-                sons.push('src/objetotresmentrodireita.mp3');
-            }
-            else if ((item =>4) && (item < 5))
-            {
-                sons.push('src/objetoquatromentrodireita.mp3');
-            }
-            else if ((item =>5) && (item < 6))
-            {
-                sons.push('src/objetodoismentrodireita.mp3');
-            }
-            else if ((item =>6) && (item < 7))
-            {
-                sons.push('src/objetotresmentrodireita.mp3');
-            }
-            else if ((item =>7) && (item < 8))
-            {
-                sons.push('src/objetoquatromentrodireita.mp3');
-            }
-            else if ((item =>8) && (item < 9))
-            {
-                sons.push('src/objetosmaisdezmetros.mp3');
-            };
-
-
             
+
+                if (item > 10) {
+
+                    alert("Distancia:"+item);
+                    alert("Posicao"+$scope.posicao[index]);
+
+                  sons.push('src/objetosmaisdezmetros.mp3');
+
+                }
+                else if ((item =>1) && (item < 2)) {
+
+                    alert(item);
+                    sons.push('src/objetoummentrodireita.mp3');
+
+
+                }
+                else if ((item =>2) && (item < 3)) {
+                    alert(item);
+                    sons.push('src/objetodoismentrodireita.mp3');
+                }
+                else if ((item =>3) && (item < 4)) {
+                    alert(item);
+                    sons.push('src/objetotresmentrodireita.mp3');
+                }
+                else if ((item =>4) && (item < 5)) {
+                    alert(item);
+                    sons.push('src/objetoquatromentrodireita.mp3');
+                }
+                else if ((item =>5) && (item < 6)) {
+                    alert(item);
+                    sons.push('src/objetodoismentrodireita.mp3');
+                }
+                else if ((item =>6) && (item < 7)) {
+                    alert(item);
+                    sons.push('src/objetotresmentrodireita.mp3');
+                }
+                else if ((item =>7) && (item < 8)) {
+                    alert(item);
+                    sons.push('src/objetoquatromentrodireita.mp3');
+                }
+                else if ((item =>8) && (item < 9)) {
+                    alert(item);
+                    sons.push('src/objetosmaisdezmetros.mp3');
+                };
+
+
+           
           
         });
        
@@ -301,11 +300,11 @@ angular.module('starter.controllers', [])
 
 
         };
-        for (var i = 0; i < sons.length; ++i) {
-            tocar(sons[i],i);
+        //for (var i = 0; i < sons.length; ++i) {
+        //    tocar(sons[i],i);
            
 
-        }
+        //}
         sons = [];
         $scope.resultado = [];
        
