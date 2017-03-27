@@ -107,7 +107,7 @@ angular.module('starter.controllers', [])
     // Success callback for watching your changing position
 
     var onMapWatchSuccess = function (position) {
-        
+
         var updatedLatitude = position.coords.latitude;
         var updatedLongitude = position.coords.longitude;
 
@@ -135,47 +135,63 @@ angular.module('starter.controllers', [])
         (onMapWatchSuccess, onMapError, { enableHighAccuracy: true });
     }
 
-   
+
 
 })
 
 
 .controller('SearchCtrl', function ($scope, $ionicLoading) {
+
+    $ionicLoading.show({ template: 'Loading...' });
+
+
+
     var calcDistancia = function (p1LA, p1LO, p2LA, p2LO) {
 
-       var r = 6371.0;
-       
-        p1LA = p1LA *  Math.PI / 180.0;
-        p1LO = p1LO *  Math.PI / 180.0;
-        p2LA = p2LA *  Math.PI / 180.0;
+        var r = 6371.0;
+
+        p1LA = p1LA * Math.PI / 180.0;
+        p1LO = p1LO * Math.PI / 180.0;
+        p2LA = p2LA * Math.PI / 180.0;
         p2LO = p2LO * Math.PI / 180.0;
-       
+
         var dLat = p2LA - p1LA;
         var dLong = p2LO - p1LO;
-       
+
         var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(p1LA) * Math.cos(p2LA) * Math.sin(dLong / 2) * Math.sin(dLong / 2);
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return Math.round(r * c * 1000);
-       
+
     };
-   
-    var calcAngulobearing = function ( x1,  y1,  x2,  y2,heading) {
+
+    var calcAngulobearing = function (x1, y1, x2, y2, heading) {
         var Rad2Deg = 180.0 / Math.PI;
         var Deg2Rad = Math.PI / 180.0;
         var dx = x2 - x1;
         var dy = y2 - y1;
         var Angle = (Math.atan2(dy, dx)) * Rad2Deg;
-        if (Angle < 0)
-        {
+        if (Angle < 0) {
             Angle = Angle + 360; //This is simular to doing
             // 360 Math.Atan2(y1 - y2, x1 - x2) * (180 / Math.PI)
-            
+
         }
-        Angle = Angle - heading;
-       
+
+        if (heading < 80) {
+            //Inverte os polos
+            heading = 180 - heading;
+            //Inverte para negativo o cabeçalho
+            heading = heading - heading * 2;
+            Angle = Angle + heading;
+            //Inverte para Negativo o angulo pois os polos estão invertido.
+            Angle = Angle - Angle * 2;
+        }
+        else {
+
+            Angle = Angle - heading;
+        }
         return Angle
     }
-
+   
 
     var Locais = [
     { Lat: 28.03932552928991, Long: 38.168157445898785, heade: 279 },
@@ -193,108 +209,126 @@ angular.module('starter.controllers', [])
     //
     $scope.resultado = [];
     $scope.posicao = [];
-   // $scope.resposta[Locais.length.valueOf()] = null;  
+    $scope.retorna = [];
+    // $scope.resposta[Locais.length.valueOf()] = null;  
     var onSuccess = function (position) {
-        alert("entrou");
-        Locais.forEach(function(item,index){  
-          $scope.resultado.push(calcDistancia(position.coords.latitude, position.coords.longitude, item.Lat, item.Long));
-          $scope.posicao.push(calcAngulobearing(position.coords.latitude, position.coords.longitude, item.Lat, item.Long, position.coords.heading))
-     
-        });
-       
         
+        Locais.forEach(function (item, index) {
+            $scope.resultado.push(calcDistancia(position.coords.latitude, position.coords.longitude, item.Lat, item.Long));
+            $scope.posicao.push(calcAngulobearing(position.coords.latitude, position.coords.longitude, item.Lat, item.Long, position.coords.heading))
+
+        });
+     
+        $ionicLoading.hide();
     };
     function onError(error) {
         alert('code: ' + error.code + '\n' +
               'message: ' + error.message + '\n');
     };
-    navigator.geolocation.getCurrentPosition(onSuccess, onError);
-    // onError Callback receives a PositionError object
-    //
-    //Colocar um progress bar com audio.
-   
-    var mediaStatusCallback = function(status) {
-        if(status == 1) {
+
+
+    var mediaStatusCallback = function (status) {
+        if (status == 1) {
             $ionicLoading.show({ template: 'Loading...' });
             alert(entrou);
         } else {
             $ionicLoading.hide();
         }
     }
- 
-   
-    $scope.chamaValor = function ()
-    {
-       
-      
+
+    var buscarposicao = function (posicao, distancia) {
+        var retorno = "O Objeto esta a " + distancia + " metros ";
+        if (posicao < 0) {
+            posicao = posicao - posicao * 2;
+
+            retorno = retorno + "e a " + posicao.toFixed(2) + " graus sua esquerda";
+        }
+        else if ((posicao > 160) && (posicao < 190)) {
+            retorno = retorno + "e a " + posicao.toFixed(2) + " graus sua costa";
+        }
+        else {
+            retorno = retorno + "e a " + posicao.toFixed(2) + " graus sua direita";
+
+        }
+        return retorno;
+    }
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    $scope.chamaValor = function () {
+        $ionicLoading.show({ template: 'Loading...' });
+
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
         $scope.resultado.forEach(function (item, index) {
-            
-
-                if (item > 10) {
-
-                    alert("Distancia:"+item);
-                    alert("Posicao"+$scope.posicao[index]);
-
-                  sons.push('src/objetosmaisdezmetros.mp3');
-
-                }
-                else if ((item =>1) && (item < 2)) {
-
-                    alert(item);
-                    sons.push('src/objetoummentrodireita.mp3');
 
 
-                }
-                else if ((item =>2) && (item < 3)) {
-                    alert(item);
-                    sons.push('src/objetodoismentrodireita.mp3');
-                }
-                else if ((item =>3) && (item < 4)) {
-                    alert(item);
-                    sons.push('src/objetotresmentrodireita.mp3');
-                }
-                else if ((item =>4) && (item < 5)) {
-                    alert(item);
-                    sons.push('src/objetoquatromentrodireita.mp3');
-                }
-                else if ((item =>5) && (item < 6)) {
-                    alert(item);
-                    sons.push('src/objetodoismentrodireita.mp3');
-                }
-                else if ((item =>6) && (item < 7)) {
-                    alert(item);
-                    sons.push('src/objetotresmentrodireita.mp3');
-                }
-                else if ((item =>7) && (item < 8)) {
-                    alert(item);
-                    sons.push('src/objetoquatromentrodireita.mp3');
-                }
-                else if ((item =>8) && (item < 9)) {
-                    alert(item);
-                    sons.push('src/objetosmaisdezmetros.mp3');
-                };
+            if (item > 10) {
+
+                $scope.retorna.push(buscarposicao($scope.posicao[index], item));
 
 
-           
-          
+                sons.push('src/objetosmaisdezmetros.mp3');
+
+            }
+            else if ((item =>1) && (item < 2)) {
+
+                alert("Distancia:" + item);
+                alert("Posicao" + $scope.posicao[index]);
+                sons.push('src/objetoummentrodireita.mp3');
+
+
+            }
+            else if ((item =>2) && (item < 3)) {
+                alert("Distancia:" + item);
+                alert("Posicao" + $scope.posicao[index]);
+                sons.push('src/objetodoismentrodireita.mp3');
+            }
+            else if ((item =>3) && (item < 4)) {
+                alert("Distancia:" + item);
+                alert("Posicao" + $scope.posicao[index]);
+                sons.push('src/objetotresmentrodireita.mp3');
+            }
+            else if ((item =>4) && (item < 5)) {
+                alert("Distancia:" + item);
+                alert("Posicao" + $scope.posicao[index]);
+                sons.push('src/objetoquatromentrodireita.mp3');
+            }
+            else if ((item =>5) && (item < 6)) {
+                alert("Distancia:" + item);
+                alert("Posicao" + $scope.posicao[index]);
+                sons.push('src/objetodoismentrodireita.mp3');
+            }
+            else if ((item =>6) && (item < 7)) {
+                alert(item);
+                sons.push('src/objetotresmentrodireita.mp3');
+            }
+            else if ((item =>7) && (item < 8)) {
+                alert(item);
+                sons.push('src/objetoquatromentrodireita.mp3');
+            }
+            else if ((item =>8) && (item < 9)) {
+                alert(item);
+                sons.push('src/objetosmaisdezmetros.mp3');
+            };
+
+
+
+
         });
-       
-        var tocar = function (src,tempo) {
+
+
+
+        var tocar = function (src, tempo) {
             var media = new Media(src, null, null, mediaStatusCallback);
 
             //executa o tempo...
-            
-
             setTimeout(function () {
                 media.play();
                 setTimeout(function () {
                     media.stop();
 
                 }, 4000);
-            }, tempo*4000);
+            }, tempo * 4000);
 
-            
+
 
 
 
@@ -302,14 +336,14 @@ angular.module('starter.controllers', [])
         };
         //for (var i = 0; i < sons.length; ++i) {
         //    tocar(sons[i],i);
-           
+
 
         //}
         sons = [];
         $scope.resultado = [];
-       
+
     };
-   
-  
+
+
 
 });

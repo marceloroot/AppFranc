@@ -1,10 +1,14 @@
 <ion-view view-title="Search">
   <ion-content>
       <button class="button button-assertive" ng-click="chamaValor()">
-          button-assertive
+         Busca
       </button>
-      <button class="button button-assertive" ng-click="play('../src/Kalimba.mp3')">
-          button-assertive
-      </button>
+     
+
+      <ion-list>
+          <button ion-item ng-repeat="n in retorna">
+              {{ n }}
+          </button>
+      </ion-list>
   </ion-content>
 </ion-view>
