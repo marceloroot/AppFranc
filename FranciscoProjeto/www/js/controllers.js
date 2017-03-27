@@ -270,42 +270,37 @@ angular.module('starter.controllers', [])
             }
             else if ((item =>1) && (item < 2)) {
 
-                alert("Distancia:" + item);
-                alert("Posicao" + $scope.posicao[index]);
+                $scope.retorna.push($scope.posicao[index],item)
                 sons.push('src/objetoummentrodireita.mp3');
 
 
             }
             else if ((item =>2) && (item < 3)) {
-                alert("Distancia:" + item);
-                alert("Posicao" + $scope.posicao[index]);
+                $scope.retorna.push($scope.posicao[index], item)
                 sons.push('src/objetodoismentrodireita.mp3');
             }
             else if ((item =>3) && (item < 4)) {
-                alert("Distancia:" + item);
-                alert("Posicao" + $scope.posicao[index]);
+                $scope.retorna.push($scope.posicao[index], item)
                 sons.push('src/objetotresmentrodireita.mp3');
             }
             else if ((item =>4) && (item < 5)) {
-                alert("Distancia:" + item);
-                alert("Posicao" + $scope.posicao[index]);
+                $scope.retorna.push($scope.posicao[index], item)
                 sons.push('src/objetoquatromentrodireita.mp3');
             }
             else if ((item =>5) && (item < 6)) {
-                alert("Distancia:" + item);
-                alert("Posicao" + $scope.posicao[index]);
+                $scope.retorna.push($scope.posicao[index], item)
                 sons.push('src/objetodoismentrodireita.mp3');
             }
             else if ((item =>6) && (item < 7)) {
-                alert(item);
+                $scope.retorna.push($scope.posicao[index], item)
                 sons.push('src/objetotresmentrodireita.mp3');
             }
             else if ((item =>7) && (item < 8)) {
-                alert(item);
+                $scope.retorna.push($scope.posicao[index], item)
                 sons.push('src/objetoquatromentrodireita.mp3');
             }
             else if ((item =>8) && (item < 9)) {
-                alert(item);
+                $scope.retorna.push($scope.posicao[index], item)
                 sons.push('src/objetosmaisdezmetros.mp3');
             };
 
