@@ -57,38 +57,37 @@ angular.module('starter.controllers', [])
 })
 
 .controller('browseCtrl', function ($scope, $rootScope, $ionicLoading) {
-    
-   $rootScope.Locais = [
-   { Lat: 28.03932552928991, Long: 38.168157445898785 },
-   
+
+    $rootScope.Locais = [
+    { Lat: 28.03932552928991, Long: 38.168157445898785 },
+
 
     ];
-   var onSuccess = function (position) {
+    var onSuccess = function (position) {
 
-       var posic = { Lat: position.coords.latitude, Long: position.coords.longitude}
-       $rootScope.Locais.push(posic);
-       $ionicLoading.hide();
-   };
-   function onError(error) {
-       alert('code: ' + error.code + '\n' +
-             'message: ' + error.message + '\n');
-   };
-   $scope.chamaValor = function()
-   {
-       navigator.geolocation.getCurrentPosition(onSuccess, onError);
-       $ionicLoading.show({ template: 'Loading...' });
-    
-   }
-  
-  
+        var posic = { Lat: position.coords.latitude, Long: position.coords.longitude }
+        $rootScope.Locais.push(posic);
+        $ionicLoading.hide();
+    };
+    function onError(error) {
+        alert('code: ' + error.code + '\n' +
+              'message: ' + error.message + '\n');
+    };
+    $scope.chamaValor = function () {
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        $ionicLoading.show({ template: 'Loading...' });
+
+    }
+
+
 })
 
 
 .controller('SearchCtrl', function ($scope, $ionicLoading, $rootScope) {
 
+   
+
     $ionicLoading.show({ template: 'Loading...' });
-
-
 
     var calcDistancia = function (p1LA, p1LO, p2LA, p2LO) {
 
@@ -135,76 +134,32 @@ angular.module('starter.controllers', [])
         }
         return Angle
     }
-   
-   
-   /* var Locais = [
-    { Lat: 28.03932552928991, Long: 38.168157445898785, heade: 279 },
-    { Lat: 43.465119, Long: -50.522375, heade: 60.90, },
-    { Lat: 43.465193, Long: -90.522386, heade: 90.90 },
-    { Lat: 43.465240, Long: -90.522389, heade: 90.90 },
-    { Lat: 60.465195, Long: 90.522388, heade: 90.90 }
 
-    ];*/
+
     var sons = [];
 
     // onSuccess Callback
     // This method accepts a Position object, which contains the
     // current GPS coordinates
     //
-    $scope.resultado = [];
     $scope.posicao = [];
-    $scope.retorna = [];
+    $scope.resultado = [];
+
+  
+
+   
     // $scope.resposta[Locais.length.valueOf()] = null;  
     var onSuccess = function (position) {
-        
-        $rootScope.Locais.forEach(function (item, index) {
+        LocaisResultado = [];
+        $scope.retorna = [];
+        $scope.resultado = [];
+        $scope.posicao = [];
+        var LocaisResultado = $rootScope.Locais;
+        LocaisResultado.forEach(function (item, index) {
             $scope.resultado.push(calcDistancia(position.coords.latitude, position.coords.longitude, item.Lat, item.Long));
             $scope.posicao.push(calcAngulobearing(position.coords.latitude, position.coords.longitude, item.Lat, item.Long, position.coords.heading))
 
         });
-     
-        $ionicLoading.hide();
-    };
-    function onError(error) {
-        alert('code: ' + error.code + '\n' +
-              'message: ' + error.message + '\n');
-    };
-
-
-    var mediaStatusCallback = function (status) {
-        if (status == 1) {
-            $ionicLoading.show({ template: 'Loading...' });
-            alert(entrou);
-        } else {
-            $ionicLoading.hide();
-        }
-    }
-
-    var buscarposicao = function (posicao, distancia) {
-        var retorno = "O Objeto esta a " + distancia + " metros ";
-        if (posicao < 0) {
-            posicao = posicao - posicao * 2;
-
-            retorno = retorno + "e a " + posicao.toFixed(2) + " graus sua esquerda";
-        }
-        else if ((posicao > 160) && (posicao < 190)) {
-            retorno = retorno + "e a " + posicao.toFixed(2) + " graus sua costa";
-        }
-        else if (posicao == 0) {
-
-            retorno = retorno;
-        }
-        else {
-            retorno = retorno + "e a " + posicao.toFixed(2) + " graus sua direita";
-
-        }
-        return retorno;
-    }
-    navigator.geolocation.getCurrentPosition(onSuccess, onError);
-    $scope.chamaValor = function () {
-        $ionicLoading.show({ template: 'Loading...' });
-
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
         $scope.resultado.forEach(function (item, index) {
 
 
@@ -259,9 +214,53 @@ angular.module('starter.controllers', [])
 
 
         });
+        $ionicLoading.hide();
+    };
+    function onError(error) {
+        alert('code: ' + error.code + '\n' +
+              'message: ' + error.message + '\n');
+    };
 
 
+    var mediaStatusCallback = function (status) {
+        if (status == 1) {
+            $ionicLoading.show({ template: 'Loading...' });
+            alert(entrou);
+        } else {
+            $ionicLoading.hide();
+        }
+    }
 
+    var buscarposicao = function (posicao, distancia) {
+        var retorno = "O Objeto esta a " + distancia + " metros ";
+        if (distancia == 0) {
+            retorno = retorno;
+        }
+        else if ((posicao > 160) && (posicao < 190)) {
+            retorno = retorno + "e a " + posicao.toFixed(2) + " graus sua costa";
+        }
+        else if (posicao < 0) {
+            posicao = posicao - posicao * 2;
+
+            retorno = retorno + "e a " + posicao.toFixed(2) + " graus sua esquerda";
+           
+        }
+        else {
+            retorno = retorno + "e a " + posicao.toFixed(2) + " graus sua direita";
+
+        }
+        return retorno;
+    }
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    $scope.chamaValor = function () {
+     
+     
+  
+        $ionicLoading.show({ template: 'Loading...' });
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+     
+
+   
         var tocar = function (src, tempo) {
             var media = new Media(src, null, null, mediaStatusCallback);
 
@@ -286,8 +285,8 @@ angular.module('starter.controllers', [])
 
         //}
         sons = [];
-        $scope.resultado = [];
-
+      
+       
     };
 
 
