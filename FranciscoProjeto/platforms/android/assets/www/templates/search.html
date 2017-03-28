@@ -6,7 +6,7 @@
      
 
       <ion-list>
-          <button ion-item ng-repeat="n in retorna">
+          <button ion-item ng-repeat="n in retorna track by $index">
               {{ n }}
           </button>
       </ion-list>

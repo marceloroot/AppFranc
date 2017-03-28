@@ -1,6 +1,14 @@
 <ion-view view-title="Browse">
   <ion-content>
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDPSn9T0FdpGv1GKxwfYuKIQ4lsRhLN27k"></script>
+   
+      <button class="button button-calm" ng-click="chamaValor()">
+       Pega posicao
+      </button>
 
+      <ul class="list">
+          <li class="item"  ng-repeat="n in Locais">
+              {{n}}
+          </li>
+      </ul>
   </ion-content>
 </ion-view>
