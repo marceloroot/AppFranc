@@ -176,7 +176,6 @@ angular.module('starter.controllers', [])
                 $scope.retorna.push(buscarposicao($scope.posicao[index], item));
                 sons.push('src/objetoummentrodireita.mp3');
 
-
             }
             else if ((item =>2) && (item < 3)) {
                 $scope.retorna.push(buscarposicao($scope.posicao[index], item));
